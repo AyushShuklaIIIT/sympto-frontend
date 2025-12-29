@@ -1,0 +1,649 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+@import "./styles/accessibility.css";
+
+:root {
+  /* Brand (health) palette – aligned with Tailwind/theme tokens */
+  --brand-50: #ecfeff;
+  --brand-100: #cffafe;
+  --brand-200: #a5f3fc;
+  --brand-300: #67e8f9;
+  --brand-500: #06b6d4;
+  --brand-600: #0891b2;
+  --brand-700: #0e7490;
+  --brand-800: #155e75;
+
+  --health-mint-500: #10b981;
+  --health-mint-600: #059669;
+  --health-mint-700: #047857;
+
+  --neutral-50: #f9fafb;
+  --neutral-100: #f3f4f6;
+  --neutral-200: #e5e7eb;
+  --neutral-600: #4b5563;
+  --neutral-700: #374151;
+  --neutral-800: #1f2937;
+  --neutral-900: #111827;
+
+  /* App background & text */
+  --app-text: var(--neutral-900);
+  --app-muted: var(--neutral-600);
+  --app-bg:
+    radial-gradient(1200px circle at 15% 10%, rgba(6, 182, 212, 0.30), transparent 55%),
+    radial-gradient(1000px circle at 85% 15%, rgba(16, 185, 129, 0.22), transparent 60%),
+    radial-gradient(900px circle at 50% 95%, rgba(8, 145, 178, 0.18), transparent 55%),
+    linear-gradient(to bottom right, var(--brand-50), rgba(255, 255, 255, 0.86), var(--brand-100));
+
+  /* Glass primitives */
+  --glass-bg: rgba(236, 254, 255, 0.58);
+  --glass-bg-strong: rgba(207, 250, 254, 0.74);
+  --glass-border: rgba(34, 211, 238, 0.22);
+  --glass-border-subtle: rgba(17, 24, 39, 0.08);
+  --glass-shadow: 0 10px 25px -12px rgba(8, 145, 178, 0.30), 0 8px 24px -16px rgba(16, 185, 129, 0.18);
+  --focus-ring: 0 0 0 3px rgba(6, 182, 212, 0.35);
+}
+
+/* Base styles for healthcare application */
+html {
+  font-family: 'Inter', system-ui, sans-serif;
+  scroll-behavior: smooth;
+}
+
+body {
+  color: var(--app-text);
+  background: var(--app-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Focus styles for accessibility */
+*:focus {
+  outline: none;
+}
+
+.focus-visible {
+  outline: none !important;
+  outline-offset: 0 !important;
+  border-radius: 0;
+}
+
+.focus-visible:focus,
+.focus-visible:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+/* Glass primitives */
+.glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: blur(14px) saturate(140%);
+}
+
+.glass-strong {
+  background: var(--glass-bg-strong);
+}
+
+.glass-nav {
+  background: rgba(255, 255, 255, 0.72);
+  border-bottom: 1px solid var(--glass-border-subtle);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  backdrop-filter: blur(16px) saturate(160%);
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.80);
+  border: 1px solid var(--glass-border-subtle);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  backdrop-filter: blur(18px) saturate(160%);
+}
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.focus\:not-sr-only:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* Button system - Healthcare focused */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+  outline: none;
+  user-select: none;
+  border: 1px solid transparent;
+}
+
+.btn:focus,
+.btn:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--brand-800), var(--brand-700), var(--health-mint-700));
+  color: white;
+  border-color: rgba(255, 255, 255, 0.22);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  backdrop-filter: blur(12px) saturate(140%);
+  box-shadow: var(--glass-shadow);
+}
+
+.btn-primary:hover:not(:disabled) {
+  filter: brightness(1.02);
+  box-shadow: 0 14px 32px -18px rgba(8, 145, 178, 0.38), 0 10px 28px -20px rgba(16, 185, 129, 0.22);
+}
+
+.btn-primary:active {
+  filter: brightness(0.98);
+}
+
+.btn-secondary {
+  background: var(--glass-bg);
+  color: var(--neutral-800);
+  border-color: var(--glass-border-subtle);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: blur(14px) saturate(140%);
+  box-shadow: var(--glass-shadow);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--glass-bg-strong);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, var(--health-mint-700), var(--health-mint-600), var(--brand-700));
+  color: white;
+  border-color: rgba(255, 255, 255, 0.22);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  backdrop-filter: blur(12px) saturate(140%);
+  box-shadow: var(--glass-shadow);
+}
+
+.btn-success:hover:not(:disabled) {
+  filter: brightness(1.02);
+}
+
+.btn-danger {
+  background: rgba(239, 68, 68, 0.88);
+  color: white;
+  border-color: rgba(255, 255, 255, 0.22);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  backdrop-filter: blur(12px) saturate(140%);
+  box-shadow: var(--glass-shadow);
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: rgba(220, 38, 38, 0.90);
+  filter: brightness(1.01);
+}
+
+.btn-danger:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25);
+}
+
+.btn-ghost {
+  background-color: transparent;
+  color: var(--neutral-700);
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.35);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  backdrop-filter: blur(10px) saturate(140%);
+  border-color: var(--glass-border-subtle);
+  color: var(--neutral-900);
+}
+
+.btn-ghost:focus {
+  box-shadow: 0 0 0 3px rgba(107, 114, 128, 0.25);
+}
+
+.btn-link {
+  background-color: transparent;
+  color: var(--brand-600);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  padding: 0.25rem 0.5rem;
+}
+
+.btn-link:hover:not(:disabled) {
+  color: var(--brand-700);
+  text-decoration: none;
+}
+
+.btn-link:focus {
+  box-shadow: var(--focus-ring);
+}
+
+/* Button sizes */
+.btn-sm {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem;
+}
+
+.btn-lg {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+}
+
+.btn-xl {
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+}
+
+/* Form elements */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--neutral-800);
+  margin-bottom: 0.25rem;
+}
+
+.form-label-required::after {
+  content: '*';
+  color: #ef4444;
+  margin-left: 0.25rem;
+}
+
+.form-input {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--glass-border-subtle);
+  border-radius: 0.5rem;
+  background: var(--glass-bg-strong);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: blur(14px) saturate(140%);
+  box-shadow: 0 1px 2px 0 rgba(17, 24, 39, 0.06);
+  transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-input::placeholder {
+  color: rgba(75, 85, 99, 0.8);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: rgba(6, 182, 212, 0.55);
+  box-shadow: var(--focus-ring), 0 1px 2px 0 rgba(17, 24, 39, 0.06);
+}
+
+.form-input-error {
+  border-color: rgba(239, 68, 68, 0.7);
+}
+
+.form-input-error:focus {
+  border-color: rgba(239, 68, 68, 0.85);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25), 0 1px 2px 0 rgba(17, 24, 39, 0.06);
+}
+
+.form-input-success {
+  border-color: rgba(16, 185, 129, 0.7);
+}
+
+.form-input-success:focus {
+  border-color: rgba(16, 185, 129, 0.85);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.22), 0 1px 2px 0 rgba(17, 24, 39, 0.06);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.form-error {
+  font-size: 0.875rem;
+  color: #ef4444;
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+}
+
+.form-help {
+  font-size: 0.875rem;
+  color: var(--app-muted);
+  margin-top: 0.25rem;
+}
+
+.form-success {
+  font-size: 0.875rem;
+  color: #10b981;
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+}
+
+/* Card components */
+.card {
+  background: var(--glass-bg);
+  border-radius: 0.75rem;
+  box-shadow: var(--glass-shadow);
+  border: 1px solid var(--glass-border);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  backdrop-filter: blur(16px) saturate(150%);
+  overflow: hidden;
+}
+
+.card-elevated {
+  box-shadow: 0 18px 40px -26px rgba(8, 145, 178, 0.48), 0 14px 32px -28px rgba(16, 185, 129, 0.25);
+  transition: box-shadow 0.3s, transform 0.3s;
+}
+
+.card-elevated:hover {
+  box-shadow: 0 24px 50px -34px rgba(8, 145, 178, 0.60), 0 18px 40px -34px rgba(16, 185, 129, 0.30);
+  transform: translateY(-1px);
+}
+
+.card-header {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--glass-border-subtle);
+  background: rgba(255, 255, 255, 0.35);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
+}
+
+.card-body {
+  padding: 1rem 1.5rem;
+}
+
+.card-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--glass-border-subtle);
+  background: rgba(255, 255, 255, 0.35);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
+}
+
+/* Progress indicators */
+.progress-bar {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid var(--glass-border-subtle);
+  border-radius: 9999px;
+  height: 0.5rem;
+  overflow: hidden;
+}
+
+.progress-fill {
+  background: linear-gradient(to right, var(--brand-500), var(--brand-600), var(--health-mint-500));
+  height: 100%;
+  border-radius: 9999px;
+  transition: all 0.5s ease-out;
+}
+
+.progress-fill-success {
+  background: linear-gradient(to right, var(--health-mint-500), var(--health-mint-600), var(--brand-500));
+  height: 100%;
+  border-radius: 9999px;
+  transition: all 0.5s ease-out;
+}
+
+/* Health-specific components */
+.health-metric {
+  background: linear-gradient(to right, rgba(236, 254, 255, 0.55), rgba(16, 185, 129, 0.10));
+  border: 1px solid rgba(165, 243, 252, 0.65);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  transition: all 0.2s;
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: blur(14px) saturate(140%);
+}
+
+.health-metric:hover {
+  box-shadow: 0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04);
+}
+
+/* Alert components */
+.alert {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: blur(14px) saturate(140%);
+}
+
+.alert-info {
+  background: rgba(6, 182, 212, 0.10);
+  border-color: rgba(6, 182, 212, 0.22);
+  color: #155e75;
+}
+
+.alert-success {
+  background: rgba(16, 185, 129, 0.10);
+  border-color: rgba(16, 185, 129, 0.22);
+  color: #047857;
+}
+
+.alert-warning {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.22);
+  color: #92400e;
+}
+
+.alert-error {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.22);
+  color: #991b1b;
+}
+
+/* Navigation components */
+.nav-link {
+  color: var(--neutral-700);
+  transition: color 0.2s;
+  outline: none;
+  border-radius: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.nav-link:hover {
+  color: var(--brand-600);
+}
+
+.nav-link:focus {
+  box-shadow: var(--focus-ring);
+}
+
+.nav-link-active {
+  color: var(--brand-700);
+  background: rgba(6, 182, 212, 0.12);
+}
+
+/* Badge components */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.125rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.badge-primary {
+  background: rgba(6, 182, 212, 0.14);
+  color: #155e75;
+}
+
+.badge-success {
+  background: rgba(16, 185, 129, 0.14);
+  color: #047857;
+}
+
+.badge-warning {
+  background: rgba(245, 158, 11, 0.16);
+  color: #92400e;
+}
+
+.badge-error {
+  background: rgba(239, 68, 68, 0.14);
+  color: #991b1b;
+}
+
+/* Loading states */
+.loading-spinner {
+  animation: spin 1s linear infinite;
+  border-radius: 50%;
+  border: 2px solid rgba(17, 24, 39, 0.12);
+  border-top-color: var(--brand-600);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-dots {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.loading-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: var(--brand-600);
+  border-radius: 50%;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Skip link for keyboard navigation */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--brand-600);
+  color: white;
+  padding: 12px 16px;
+  text-decoration: none;
+  border-radius: 6px;
+  z-index: 9999;
+  font-weight: 600;
+  transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+  top: 6px;
+  outline: 3px solid #fbbf24;
+  outline-offset: 2px;
+}
+
+/* Text gradients */
+.text-gradient {
+  background: linear-gradient(to right, var(--brand-600), var(--brand-500), var(--health-mint-500));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.text-gradient-health {
+  background: linear-gradient(to right, var(--health-mint-500), var(--brand-500));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Background gradients */
+.bg-gradient-health {
+  background: linear-gradient(to bottom right, var(--brand-500), var(--brand-600), var(--health-mint-500));
+}
+
+.bg-gradient-soft {
+  background: var(--app-bg);
+  background-attachment: fixed;
+}
+
+/* Responsive text sizing */
+.text-responsive-sm {
+  font-size: 0.875rem;
+}
+
+.text-responsive-base {
+  font-size: 1rem;
+}
+
+.text-responsive-lg {
+  font-size: 1.125rem;
+}
+
+.text-responsive-xl {
+  font-size: 1.25rem;
+}
+
+.text-responsive-2xl {
+  font-size: 1.5rem;
+}
+
+.text-responsive-3xl {
+  font-size: 1.875rem;
+}
+
+@media (min-width: 768px) {
+  .text-responsive-sm {
+    font-size: 1rem;
+  }
+  
+  .text-responsive-base {
+    font-size: 1.125rem;
+  }
+  
+  .text-responsive-lg {
+    font-size: 1.25rem;
+  }
+  
+  .text-responsive-xl {
+    font-size: 1.5rem;
+  }
+  
+  .text-responsive-2xl {
+    font-size: 1.875rem;
+  }
+  
+  .text-responsive-3xl {
+    font-size: 2.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .text-responsive-3xl {
+    font-size: 3rem;
+  }
+}

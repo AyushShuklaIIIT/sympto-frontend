@@ -1,0 +1,481 @@
+/**
+ * Sympto Accessibility Enhancements
+ * Comprehensive accessibility improvements for healthcare application
+ */
+
+/* ===== FOCUS MANAGEMENT ===== */
+
+/* Focus outlines intentionally disabled per UX request */
+*:focus-visible {
+  outline: none !important;
+  outline-offset: 0 !important;
+  border-radius: 0 !important;
+}
+
+/* Remove default focus outline when focus-visible is supported */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Ensure focus is visible on all interactive elements */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+a:focus-visible,
+[role="button"]:focus-visible,
+[role="link"]:focus-visible,
+[tabindex]:focus-visible {
+  outline: none !important;
+  outline-offset: 0 !important;
+}
+
+/* ===== SCREEN READER SUPPORT ===== */
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Make screen reader content visible when focused */
+.sr-only:focus {
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  padding: inherit !important;
+  margin: inherit !important;
+  overflow: visible !important;
+  clip: auto !important;
+  white-space: normal !important;
+}
+
+/* ===== SKIP LINKS ===== */
+
+/* Skip to main content link */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: #2563eb;
+  color: white;
+  padding: 12px 16px;
+  text-decoration: none;
+  border-radius: 6px;
+  z-index: 9999;
+  font-weight: 600;
+  transition: top 0.3s ease;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.skip-link:focus {
+  top: 6px;
+  outline: 3px solid #fbbf24;
+  outline-offset: 2px;
+}
+
+/* ===== HIGH CONTRAST MODE SUPPORT ===== */
+
+@media (prefers-contrast: high) {
+  /* Increase border contrast */
+  .card,
+  .btn,
+  .form-input,
+  .alert {
+    border: 2px solid currentColor !important;
+  }
+  
+  /* Ensure text has sufficient contrast */
+  .text-gray-500,
+  .text-gray-600 {
+    color: #374151 !important;
+  }
+  
+  /* High contrast focus indicators */
+  *:focus-visible {
+    outline: 4px solid #000000 !important;
+    outline-offset: 2px !important;
+    background-color: #ffff00 !important;
+    color: #000000 !important;
+  }
+}
+
+/* ===== REDUCED MOTION SUPPORT ===== */
+
+@media (prefers-reduced-motion: reduce) {
+  /* Disable animations for users who prefer reduced motion */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  /* Keep essential loading indicators but make them static */
+  .loading-spinner {
+    animation: none !important;
+    border: 3px solid #e5e7eb;
+    border-top: 3px solid #2563eb;
+  }
+}
+
+/* ===== FONT SIZE AND ZOOM SUPPORT ===== */
+
+/* Ensure text remains readable at 200% zoom */
+@media (min-width: 1280px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+/* Support for user font size preferences */
+@media (prefers-reduced-data: reduce) {
+  /* Reduce non-essential visual elements for users on limited data */
+  .bg-gradient-health,
+  .bg-gradient-soft {
+    background: #06b6d4 !important;
+  }
+  
+  /* Simplify shadows */
+  .shadow-soft,
+  .shadow-health {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+  }
+}
+
+/* ===== COLOR BLINDNESS SUPPORT ===== */
+
+/* Ensure status indicators don't rely solely on color */
+.badge-success::before,
+.health-status-excellent::before {
+  content: "✓ ";
+  font-weight: bold;
+}
+
+.badge-error::before,
+.health-status-poor::before {
+  content: "⚠ ";
+  font-weight: bold;
+}
+
+.badge-warning::before,
+.health-status-fair::before {
+  content: "⚡ ";
+  font-weight: bold;
+}
+
+/* ===== TOUCH TARGET SIZES ===== */
+
+/* Ensure minimum 44px touch targets for mobile */
+@media (max-width: 768px) {
+  button,
+  input[type="button"],
+  input[type="submit"],
+  input[type="reset"],
+  input[type="checkbox"],
+  input[type="radio"],
+  select,
+  a,
+  [role="button"],
+  [role="link"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Adjust padding for smaller buttons to maintain touch target */
+  .btn-sm {
+    padding: 12px 16px !important;
+  }
+  
+  /* Ensure form inputs have adequate touch targets */
+  .form-input,
+  .form-select,
+  .form-textarea {
+    min-height: 44px;
+    padding: 12px 16px;
+  }
+}
+
+/* ===== KEYBOARD NAVIGATION ===== */
+
+/* Visible focus indicators for keyboard users */
+.keyboard-user *:focus {
+  outline: 3px solid #2563eb !important;
+  outline-offset: 2px !important;
+}
+
+/* Skip to content functionality */
+.skip-to-content {
+  position: absolute;
+  left: -9999px;
+  z-index: 999;
+  padding: 8px;
+  background-color: #2563eb;
+  color: white;
+  text-decoration: none;
+}
+
+.skip-to-content:focus {
+  left: 6px;
+  top: 6px;
+}
+
+/* ===== ARIA LIVE REGIONS ===== */
+
+/* Ensure live regions are properly positioned */
+[aria-live] {
+  position: relative;
+}
+
+/* Style for status messages */
+.status-message {
+  padding: 8px 12px;
+  border-radius: 4px;
+  background-color: #f3f4f6;
+  border-left: 4px solid #2563eb;
+  margin: 8px 0;
+}
+
+/* ===== RESPONSIVE DESIGN ENHANCEMENTS ===== */
+
+/* Mobile-first responsive typography */
+@media (max-width: 640px) {
+  /* Ensure text remains readable on small screens */
+  .text-responsive-3xl {
+    font-size: 1.875rem !important; /* 30px */
+    line-height: 2.25rem !important; /* 36px */
+  }
+  
+  .text-responsive-2xl {
+    font-size: 1.5rem !important; /* 24px */
+    line-height: 2rem !important; /* 32px */
+  }
+  
+  .text-responsive-xl {
+    font-size: 1.25rem !important; /* 20px */
+    line-height: 1.75rem !important; /* 28px */
+  }
+  
+  /* Adjust card padding for mobile */
+  .card-body {
+    padding: 1rem !important;
+  }
+  
+  /* Stack navigation items vertically on mobile */
+  .nav-mobile {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  /* Ensure buttons are full width on mobile when needed */
+  .btn-mobile-full {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Tablet responsive adjustments */
+@media (min-width: 641px) and (max-width: 1024px) {
+  /* Adjust grid layouts for tablet */
+  .grid-responsive {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Desktop enhancements */
+@media (min-width: 1025px) {
+  /* Enhanced hover states for desktop */
+  .card-elevated:hover {
+    transform: translateY(-2px);
+    transition: transform 0.2s ease;
+  }
+  
+  /* Better spacing for desktop */
+  .desktop-spacing {
+    padding: 2rem;
+  }
+}
+
+/* ===== PRINT STYLES ===== */
+
+@media print {
+  /* Ensure content is readable when printed */
+  .skip-link,
+  .sr-only,
+  button,
+  .btn {
+    display: none !important;
+  }
+  
+  /* Ensure text is black for printing */
+  * {
+    color: #000000 !important;
+    background: transparent !important;
+  }
+
+  /* Printing + glassmorphism don't mix well in some browsers.
+     Force cards to a simple printable layout so result content isn't dropped. */
+  html,
+  body {
+    background: #ffffff !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .card,
+  .card-header,
+  .card-body,
+  .card-footer {
+    background: #ffffff !important;
+    box-shadow: none !important;
+    border-color: #d1d5db !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    filter: none !important;
+  }
+
+  /* Allow long result cards (e.g., AI guidance) to flow across pages.
+     Some browsers will clip or omit tall elements when break-inside is avoided. */
+  .card {
+    overflow: visible !important;
+    break-inside: auto !important;
+    page-break-inside: auto !important;
+  }
+  
+  /* Show URLs for links */
+  a[href]:after {
+    content: " (" attr(href) ")";
+  }
+  
+  /* Page break handling */
+  .assessment-step {
+    page-break-inside: avoid;
+  }
+}
+
+/* ===== ERROR STATES AND VALIDATION ===== */
+
+/* Enhanced error styling for accessibility */
+.form-input-error {
+  border-color: #dc2626 !important;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
+}
+
+.form-input-error:focus {
+  outline: 3px solid #dc2626 !important;
+  outline-offset: 2px !important;
+}
+
+/* Success states */
+.form-input-success {
+  border-color: #059669 !important;
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1) !important;
+}
+
+/* ===== LOADING STATES ===== */
+
+/* Accessible loading indicators */
+.loading-accessible {
+  position: relative;
+}
+
+.loading-accessible::after {
+  content: "Loading...";
+  position: absolute;
+  left: -9999px;
+}
+
+/* ===== HEALTHCARE-SPECIFIC ACCESSIBILITY ===== */
+
+/* Ensure health status indicators are accessible */
+.health-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.health-status::before {
+  content: attr(data-status-icon);
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+/* Medical data tables */
+.medical-data-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.medical-data-table th,
+.medical-data-table td {
+  border: 1px solid #d1d5db;
+  padding: 12px;
+  text-align: left;
+}
+
+.medical-data-table th {
+  background-color: #f9fafb;
+  font-weight: 600;
+}
+
+/* Ensure medical values are clearly readable */
+.medical-value {
+  font-family: 'ui-monospace', 'SFMono-Regular', monospace;
+  font-weight: 600;
+  font-size: 1.1em;
+}
+
+/* ===== UTILITY CLASSES ===== */
+
+/* Focus management utilities */
+.focus-trap {
+  position: relative;
+}
+
+.focus-trap:focus-within {
+  outline: 2px solid #2563eb;
+  outline-offset: 4px;
+}
+
+/* Accessible hiding */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* High contrast text */
+.text-high-contrast {
+  color: #000000 !important;
+  background-color: #ffffff !important;
+  padding: 2px 4px;
+  border-radius: 2px;
+}
+
+/* Accessible button states */
+.btn-accessible:disabled {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+}
+
+.btn-accessible[aria-pressed="true"] {
+  background-color: #1d4ed8 !important;
+  color: white !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
