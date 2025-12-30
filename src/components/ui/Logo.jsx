@@ -15,7 +15,7 @@ const Logo = forwardRef(({
   };
   const sizeClasses = {
     xs: 'w-6 h-6',
-    sm: 'w-8 h-8', 
+    sm: 'w-9 h-9', 
     md: 'w-10 h-10',
     lg: 'w-12 h-12',
     xl: 'w-16 h-16'
@@ -23,7 +23,7 @@ const Logo = forwardRef(({
 
   const textSizeClasses = {
     xs: 'text-lg',
-    sm: 'text-xl',
+    sm: 'text-2xl',
     md: 'text-2xl', 
     lg: 'text-3xl',
     xl: 'text-4xl'
