@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AssessmentHistory, AssessmentComparison, ResultsDisplay, UserProfile } from '../components/dashboard';
 import { assessmentService } from '../services';
+import Logo from '../components/ui/Logo';
 
 const DashboardPage = () => {
   const [currentView, setCurrentView] = useState('history'); // 'history', 'comparison', 'details', 'profile'
@@ -58,10 +59,8 @@ const DashboardPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-linear-to-r from-primary-600 to-health-mint rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">S</span>
-              </div>
-              <h1 className="text-2xl font-bold text-gray-900">Sympto</h1>
+              <Logo size="sm" variant="icon" />
+              <h1 className="text-2xl font-display font-bold text-gradient">Sympto</h1>
             </div>
             
             <nav className="flex space-x-8">

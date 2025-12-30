@@ -7,6 +7,7 @@ import Button from '../ui/Button';
 import Input from '../ui/Input';
 import Card from '../ui/Card';
 import Alert from '../ui/Alert';
+import Logo from '../ui/Logo';
 
 const LoginForm = ({ onSwitchToRegister, onSwitchToReset }) => {
   const { login, isLoading, error, clearError } = useAuth();
@@ -44,13 +45,7 @@ const LoginForm = ({ onSwitchToRegister, onSwitchToReset }) => {
       <Card.Header>
         <div className="text-center">
           <div className="flex items-center justify-center space-x-3 mb-4">
-            <div 
-              className="w-10 h-10 bg-gradient-health rounded-lg flex items-center justify-center"
-              role="img"
-              aria-label="Sympto logo"
-            >
-              <span className="text-white font-bold text-xl" aria-hidden="true">S</span>
-            </div>
+            <Logo size="md" variant="icon" />
             <h1 className="text-2xl font-display font-bold text-gradient">
               Sympto
             </h1>

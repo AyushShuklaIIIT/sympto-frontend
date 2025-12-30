@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { AssessmentWizard, AIResultsDisplay } from '../components/assessment';
 import { assessmentService } from '../services';
 import { Alert, Card, Badge, Button } from '../components/ui';
+import Logo from '../components/ui/Logo';
 
 const AssessmentPage = () => {
   const [currentAssessment, setCurrentAssessment] = useState(null);
@@ -210,12 +211,8 @@ const AssessmentPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-3">
-              <img 
-                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='url(%23gradient)'/%3E%3Ctext x='16' y='22' text-anchor='middle' fill='white' font-family='Arial' font-size='18' font-weight='bold'%3ES%3C/text%3E%3Cdefs%3E%3ClinearGradient id='gradient' x1='0%25' y1='0%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0%25' stop-color='%230891b2'/%3E%3Cstop offset='100%25' stop-color='%2310b981'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E"
-                alt="Sympto logo"
-                className="w-8 h-8 rounded-lg"
-              />
-              <h1 className="text-2xl font-bold text-gray-900">Sympto Health Assessment</h1>
+              <Logo size="sm" variant="icon" />
+              <h1 className="text-2xl font-display font-bold text-gradient">Sympto Health Assessment</h1>
             </div>
             
             {showResults && (
