@@ -1,16 +1,68 @@
-# React + Vite
+# Sympto Frontend (Web App)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This folder contains the **React + Vite** single-page application (SPA) for the Sympto Health Assessment Platform.
 
-Currently, two official plugins are available:
+## Responsibilities
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- User-facing UI (Home, Auth, Assessment, Dashboard)
+- Handles authentication state in the browser (JWT stored in localStorage)
+- Calls the backend API for users/assessments/consent
+- Sends a best-effort warm-up request to reduce external AI cold starts
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React (Vite)
+- React Router
+- React Hook Form + Zod
+- Tailwind CSS
 
-## Expanding the ESLint configuration
+## Getting Started (Local)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Install
+
+```bash
+cd sympto
+npm install
+```
+
+### Configure API URL
+
+The app expects a backend API base URL (including `/api`).
+
+- Default (no config): `http://localhost:5000/api`
+- Recommended: set `VITE_API_URL` in your environment.
+
+Example (PowerShell):
+
+```powershell
+$env:VITE_API_URL="http://localhost:5000/api"
+npm run dev
+```
+
+### Run
+
+```bash
+npm run dev
+```
+
+Frontend dev server:
+
+- `http://localhost:5173`
+
+## Scripts
+
+- `npm run dev` – start Vite dev server
+- `npm run build` – build production assets
+- `npm run preview` – preview the production build
+- `npm test` – run tests (Vitest)
+- `npm run lint` / `npm run lint:fix`
+- `npm run format`
+
+## Notes
+
+- On app load, the frontend calls `GET /api/ai/health` (via the backend) to wake any sleeping external AI service hosted on Render.
+- Protected routes (like `/dashboard` and `/assessment`) are guarded via `AuthGuard`.
+
+## More Documentation
+
+See the repo-level guide: [../DOCUMENTATION.md](../DOCUMENTATION.md)
