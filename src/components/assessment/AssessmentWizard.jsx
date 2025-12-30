@@ -23,19 +23,18 @@ const assessmentSchema = z.object({
   vegetarian: z.number().int().min(0).max(1),
   iron_food_freq: z.number().int().min(0).max(3),
   dairy_freq: z.number().int().min(0).max(3),
-  sunlight_min: z.number().int().min(0).max(59), // minutes per day
+  sunlight_min: z.number().int().min(0).max(65), // minutes per day
   junk_food_freq: z.number().int().min(0).max(3),
   smoking: z.number().int().min(0).max(1),
   alcohol: z.number().int().min(0).max(1),
   
   // Lab results
-  // Require lab values to be provided (and > 0). This prevents drafts/defaults of 0
-  // from letting users skip these fields.
-  hemoglobin: z.number().gt(0).max(30), // g/dL
-  ferritin: z.number().gt(0).max(5000), // ng/mL
-  vitamin_b12: z.number().gt(0).max(2000), // pg/mL
-  vitamin_d: z.number().gt(0).max(200), // ng/mL
-  calcium: z.number().gt(0).max(20), // mg/dL
+  // Require lab values to be provided (non-null) and constrained to expected ranges.
+  hemoglobin: z.number().min(7.2).max(16.5), // g/dL
+  ferritin: z.number().min(4.5).max(165), // ng/mL
+  vitamin_b12: z.number().min(108).max(550), // pg/mL
+  vitamin_d: z.number().min(4.5).max(49.5), // ng/mL
+  calcium: z.number().min(6.75).max(11.22), // mg/dL
 });
 
 const STEPS = [

@@ -40,7 +40,7 @@ const LifestyleStep = ({ form }) => {
       help: 'How many minutes of direct sunlight do you get on an average day?',
       type: 'number',
       min: 0,
-      max: 59,
+      max: 65,
       unit: 'minutes per day',
     },
     {
