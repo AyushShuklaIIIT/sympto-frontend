@@ -7,6 +7,8 @@ import { measurePageLoad, monitorWebVitals, checkPerformanceBudget } from './uti
 import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import './App.css'
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
 const HomePage = ({ currentPage, navigateToPage, handleKeyDown }) => {
   const { isAuthenticated, logout } = useAuth();
 
@@ -201,6 +203,21 @@ const PrivacyPage = lazy(() => import('./pages/PrivacyPage'))
 function App() {
   const location = useLocation()
   const navigate = useNavigate()
+
+  // Warm up the external AI service on initial site open (Render free instances sleep).
+  useEffect(() => {
+    const controller = new AbortController();
+
+    fetch(`${API_BASE_URL}/ai/health`, {
+      method: 'GET',
+      cache: 'no-store',
+      signal: controller.signal
+    }).catch(() => {
+      // Best-effort warmup; ignore failures.
+    });
+
+    return () => controller.abort();
+  }, []);
 
   const getCurrentPageFromPath = (pathname) => {
     if (pathname === '/') return 'home'
