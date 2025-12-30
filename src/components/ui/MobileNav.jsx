@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useAuth } from '../../contexts';
 import { Logo } from './index.js';
 
 /**
@@ -10,6 +11,7 @@ const MobileNav = ({
   onNavigate, 
   className = '' 
 }) => {
+  const { isAuthenticated, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
   const buttonRef = useRef(null);
@@ -65,15 +67,24 @@ const MobileNav = ({
     };
   }, [isOpen]);
 
-  const handleNavigation = (page) => {
-    onNavigate(page);
+  const handleNavigation = (item) => {
+    if (item?.id === 'signout') {
+      logout();
+      onNavigate('home');
+      setIsOpen(false);
+      return;
+    }
+
+    onNavigate(item?.id);
     setIsOpen(false);
   };
 
   const navigationItems = [
     { id: 'home', label: 'Home', href: '#home' },
     { id: 'assessment', label: 'Assessment', href: '#assessment' },
-    { id: 'auth', label: 'Sign In', href: '#auth' },
+    isAuthenticated
+      ? { id: 'signout', label: 'Sign Out', href: '#signout' }
+      : { id: 'auth', label: 'Sign In', href: '#auth' },
     { id: 'dashboard', label: 'Dashboard', href: '#dashboard' },
   ];
 
@@ -89,7 +100,7 @@ const MobileNav = ({
             {navigationItems.map((item) => (
               <button
                 key={item.id}
-                onClick={() => handleNavigation(item.id)}
+                onClick={() => handleNavigation(item)}
                 className={`nav-link ${currentPage === item.id ? 'nav-link-active' : ''}`}
                 aria-current={currentPage === item.id ? 'page' : undefined}
               >
@@ -193,7 +204,7 @@ const MobileNav = ({
                 {navigationItems.map((item) => (
                   <button
                     key={item.id}
-                    onClick={() => handleNavigation(item.id)}
+                    onClick={() => handleNavigation(item)}
                     className={`
                       w-full text-left px-4 py-3 rounded-lg text-base font-medium transition-colors duration-200
                       ${currentPage === item.id 

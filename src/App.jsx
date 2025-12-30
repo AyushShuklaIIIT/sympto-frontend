@@ -1,100 +1,21 @@
 import { useEffect, Suspense, lazy } from 'react'
 import { MobileNav, ResponsiveContainer, Logo, LoadingSpinner } from './components/ui'
-import { AuthProvider } from './contexts'
+import { AuthProvider, useAuth } from './contexts'
 import { AuthGuard } from './components/auth'
 import { initializeAccessibility } from './utils/accessibility'
 import { measurePageLoad, monitorWebVitals, checkPerformanceBudget } from './utils/performance'
 import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import './App.css'
 
-// Lazy load pages for code splitting
-const AssessmentPage = lazy(() => import('./pages/AssessmentPage'))
-const AuthPage = lazy(() => import('./pages/AuthPage'))
-const DashboardPage = lazy(() => import('./pages/DashboardPage'))
-const DataManagementPage = lazy(() => import('./pages/DataManagementPage'))
-const PrivacyPage = lazy(() => import('./pages/PrivacyPage'))
+const HomePage = ({ currentPage, navigateToPage, handleKeyDown }) => {
+  const { isAuthenticated, logout } = useAuth();
 
-function App() {
-  const location = useLocation()
-  const navigate = useNavigate()
-
-  const getCurrentPageFromPath = (pathname) => {
-    if (pathname === '/') return 'home'
-    if (pathname.startsWith('/assessment')) return 'assessment'
-    if (pathname.startsWith('/auth')) return 'auth'
-    if (pathname.startsWith('/dashboard')) return 'dashboard'
-    if (pathname.startsWith('/data-management')) return 'data-management'
-    if (pathname.startsWith('/privacy')) return 'privacy'
-    return 'home'
-  }
-
-  const currentPage = getCurrentPageFromPath(location.pathname)
-
-  // Initialize accessibility enhancements, performance monitoring, and offline capabilities
-  useEffect(() => {
-    initializeAccessibility();
-    
-    // Set page title based on current page
-    const pageTitles = {
-      home: 'Sympto - Health Assessment Platform',
-      assessment: 'Health Assessment - Sympto',
-      auth: 'Sign In - Sympto',
-      dashboard: 'Dashboard - Sympto',
-      'data-management': 'Data Management - Sympto',
-      privacy: 'Privacy Policy - Sympto'
-    };
-    
-    document.title = pageTitles[currentPage] || 'Sympto - Health Assessment Platform';
-    
-    // Offline capabilities intentionally removed (no Service Worker)
-    
-    // Monitor performance metrics
-    setTimeout(() => {
-      measurePageLoad();
-      monitorWebVitals();
-      const budget = checkPerformanceBudget();
-      if (budget) {
-        console.log('Performance Budget Check:', budget);
-      }
-    }, 1000);
-  }, [currentPage]);
-
-  // Handle page navigation with focus management
-  const navigateToPage = (page) => {
-    const pathByPage = {
-      home: '/',
-      assessment: '/assessment',
-      auth: '/auth',
-      dashboard: '/dashboard',
-      'data-management': '/data-management',
-      privacy: '/privacy',
-    }
-    const targetPath = pathByPage[page] || '/'
-    navigate(targetPath)
-    // Announce page change to screen readers
-    const announcement = document.getElementById('status-announcements');
-    if (announcement) {
-      const pageTitles = {
-        home: 'Navigated to home page',
-        assessment: 'Navigated to health assessment page',
-        auth: 'Navigated to sign in page',
-        dashboard: 'Navigated to dashboard page',
-        'data-management': 'Navigated to data management page',
-        privacy: 'Navigated to privacy policy page'
-      };
-      announcement.textContent = pageTitles[page] || 'Page changed';
-    }
+  const handleSignOut = () => {
+    logout();
+    navigateToPage('home');
   };
 
-  // Handle keyboard navigation
-  const handleKeyDown = (event, action) => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      action();
-    }
-  };
-
-  const renderHomePage = () => (
+  return (
     <div className="min-h-screen bg-gradient-soft">
       {/* Live region for announcements */}
       <div 
@@ -148,18 +69,32 @@ function App() {
             <div id="start-assessment-desc" className="sr-only">
               Begin your comprehensive health assessment questionnaire
             </div>
-            <button 
-              onClick={() => navigateToPage('auth')}
-              onKeyDown={(e) => handleKeyDown(e, () => navigateToPage('auth'))}
-              className="btn-secondary btn-lg focus-visible"
-              aria-describedby="auth-desc"
-              type="button"
-            >
-              Sign In / Register
-            </button>
-            <div id="auth-desc" className="sr-only">
-              Sign in, create an account, or reset your password
-            </div>
+
+            {isAuthenticated ? (
+              <button 
+                onClick={handleSignOut}
+                onKeyDown={(e) => handleKeyDown(e, handleSignOut)}
+                className="btn-secondary btn-lg focus-visible"
+                type="button"
+              >
+                Sign Out
+              </button>
+            ) : (
+              <button 
+                onClick={() => navigateToPage('auth')}
+                onKeyDown={(e) => handleKeyDown(e, () => navigateToPage('auth'))}
+                className="btn-secondary btn-lg focus-visible"
+                aria-describedby="auth-desc"
+                type="button"
+              >
+                Sign In / Register
+              </button>
+            )}
+            {!isAuthenticated && (
+              <div id="auth-desc" className="sr-only">
+                Sign in, create an account, or reset your password
+              </div>
+            )}
           </div>
         </section>
 
@@ -253,7 +188,95 @@ function App() {
         </ResponsiveContainer>
       </footer>
     </div>
-  )
+  );
+};
+
+// Lazy load pages for code splitting
+const AssessmentPage = lazy(() => import('./pages/AssessmentPage'))
+const AuthPage = lazy(() => import('./pages/AuthPage'))
+const DashboardPage = lazy(() => import('./pages/DashboardPage'))
+const DataManagementPage = lazy(() => import('./pages/DataManagementPage'))
+const PrivacyPage = lazy(() => import('./pages/PrivacyPage'))
+
+function App() {
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  const getCurrentPageFromPath = (pathname) => {
+    if (pathname === '/') return 'home'
+    if (pathname.startsWith('/assessment')) return 'assessment'
+    if (pathname.startsWith('/auth')) return 'auth'
+    if (pathname.startsWith('/dashboard')) return 'dashboard'
+    if (pathname.startsWith('/data-management')) return 'data-management'
+    if (pathname.startsWith('/privacy')) return 'privacy'
+    return 'home'
+  }
+
+  const currentPage = getCurrentPageFromPath(location.pathname)
+
+  // Initialize accessibility enhancements, performance monitoring, and offline capabilities
+  useEffect(() => {
+    initializeAccessibility();
+    
+    // Set page title based on current page
+    const pageTitles = {
+      home: 'Sympto - Health Assessment Platform',
+      assessment: 'Health Assessment - Sympto',
+      auth: 'Sign In - Sympto',
+      dashboard: 'Dashboard - Sympto',
+      'data-management': 'Data Management - Sympto',
+      privacy: 'Privacy Policy - Sympto'
+    };
+    
+    document.title = pageTitles[currentPage] || 'Sympto - Health Assessment Platform';
+    
+    // Offline capabilities intentionally removed (no Service Worker)
+    
+    // Monitor performance metrics
+    setTimeout(() => {
+      measurePageLoad();
+      monitorWebVitals();
+      const budget = checkPerformanceBudget();
+      if (budget) {
+        console.log('Performance Budget Check:', budget);
+      }
+    }, 1000);
+  }, [currentPage]);
+
+  // Handle page navigation with focus management
+  const navigateToPage = (page) => {
+    const pathByPage = {
+      home: '/',
+      assessment: '/assessment',
+      auth: '/auth',
+      dashboard: '/dashboard',
+      'data-management': '/data-management',
+      privacy: '/privacy',
+    }
+    const targetPath = pathByPage[page] || '/'
+    navigate(targetPath)
+    // Announce page change to screen readers
+    const announcement = document.getElementById('status-announcements');
+    if (announcement) {
+      const pageTitles = {
+        home: 'Navigated to home page',
+        assessment: 'Navigated to health assessment page',
+        auth: 'Navigated to sign in page',
+        dashboard: 'Navigated to dashboard page',
+        'data-management': 'Navigated to data management page',
+        privacy: 'Navigated to privacy policy page'
+      };
+      announcement.textContent = pageTitles[page] || 'Page changed';
+    }
+  };
+
+  // Handle keyboard navigation
+  const handleKeyDown = (event, action) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      action();
+    }
+  };
 
   return (
     <AuthProvider>
@@ -268,7 +291,16 @@ function App() {
         </div>
       }>
         <Routes>
-          <Route path="/" element={renderHomePage()} />
+          <Route
+            path="/"
+            element={
+              <HomePage
+                currentPage={currentPage}
+                navigateToPage={navigateToPage}
+                handleKeyDown={handleKeyDown}
+              />
+            }
+          />
           <Route
             path="/assessment"
             element={

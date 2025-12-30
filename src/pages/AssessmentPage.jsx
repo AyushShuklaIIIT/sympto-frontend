@@ -1,16 +1,25 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AssessmentWizard, AIResultsDisplay } from '../components/assessment';
 import { assessmentService } from '../services';
 import { Alert, Card, Badge, Button } from '../components/ui';
 import Logo from '../components/ui/Logo';
+import { useAuth } from '../contexts';
 
 const AssessmentPage = () => {
+  const navigate = useNavigate();
+  const { logout } = useAuth();
   const [currentAssessment, setCurrentAssessment] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isRetrying, setIsRetrying] = useState(false);
   const [error, setError] = useState(null);
   const [showResults, setShowResults] = useState(false);
   const [statusMessage, setStatusMessage] = useState('');
+
+  const handleSignOut = () => {
+    logout();
+    navigate('/', { replace: true });
+  };
 
   const OUTPUT_FIELDS = [
     { key: 'iron_def', label: 'Iron deficiency' },
@@ -214,19 +223,29 @@ const AssessmentPage = () => {
               <Logo size="sm" variant="icon" />
               <h1 className="text-2xl font-display font-bold text-gradient">Sympto Health Assessment</h1>
             </div>
-            
-            {showResults && (
+
+            <div className="flex items-center gap-3">
+              {showResults && (
+                <button
+                  type="button"
+                  onClick={handleStartNewAssessment}
+                  className="px-4 py-2 text-sm font-medium text-primary-700 bg-primary-50 rounded-md hover:bg-primary-100 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                  aria-describedby="new-assessment-desc"
+                >
+                  New Assessment
+                </button>
+              )}
               <button
-                onClick={handleStartNewAssessment}
-                className="px-4 py-2 text-sm font-medium text-primary-700 bg-primary-50 rounded-md hover:bg-primary-100 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-                aria-describedby="new-assessment-desc"
+                type="button"
+                onClick={handleSignOut}
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white/60 rounded-md hover:bg-white/80 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
               >
-                New Assessment
+                Sign Out
               </button>
-            )}
-            <span id="new-assessment-desc" className="sr-only">
-              Start a new health assessment questionnaire
-            </span>
+              <span id="new-assessment-desc" className="sr-only">
+                Start a new health assessment questionnaire
+              </span>
+            </div>
           </div>
         </div>
       </header>

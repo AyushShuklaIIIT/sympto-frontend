@@ -1,14 +1,22 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AssessmentHistory, AssessmentComparison, ResultsDisplay, UserProfile } from '../components/dashboard';
 import { assessmentService } from '../services';
 import Logo from '../components/ui/Logo';
+import { useAuth } from '../contexts';
 
 const DashboardPage = () => {
+  const navigate = useNavigate();
+  const { logout } = useAuth();
   const [currentView, setCurrentView] = useState('history'); // 'history', 'comparison', 'details', 'profile'
   const [selectedAssessment, setSelectedAssessment] = useState(null);
   const [selectedAssessments, setSelectedAssessments] = useState([]);
   const [isRetrying, setIsRetrying] = useState(false);
+
+  const handleSignOut = () => {
+    logout();
+    navigate('/', { replace: true });
+  };
 
   const handleSelectAssessment = (assessment) => {
     setSelectedAssessment(assessment);
@@ -95,6 +103,14 @@ const DashboardPage = () => {
                 }`}
               >
                 Profile
+              </button>
+
+              <button
+                type="button"
+                onClick={handleSignOut}
+                className="text-gray-600 hover:text-primary-600 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-md px-2 py-1"
+              >
+                Sign Out
               </button>
             </nav>
           </div>
