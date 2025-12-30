@@ -1,0 +1,17 @@
+{
+  "enabled": true,
+  "name": "JSX Accessibility Checker",
+  "description": "Automatically checks for accessibility (a11y) issues in JSX files when saved, ensuring the medical app meets accessibility standards",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "*.jsx",
+      "*.tsx"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Review the JSX file I just saved for accessibility (a11y) issues. Check for missing alt text on images, proper ARIA labels, semantic HTML elements, keyboard navigation support, color contrast considerations, and any other accessibility violations. Since this is for a medical app called Sympto, accessibility compliance is critical. Provide specific recommendations to fix any issues found."
+  }
+}
